@@ -40,7 +40,7 @@
         "magento/module-widget-sample-data": "100.4.*",
         "magento/module-wishlist-sample-data": "100.4.*",
         "magento/product-community-edition": "2.4.8-p3",
-        "magento/sample-data-media": "*"
+        "magento/sample-data-media": "^100.4"
     },
     "autoload": {
         "exclude-from-classmap": [
@@ -66,7 +66,6 @@
         "carlos-mg89/oauth": "^0.8.17",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
         "dg/bypass-finals": "^1.4",
-        "friendsofphp/php-cs-fixer": "^3.22",
         "magento/magento-coding-standard": "*",
         "magento/magento2-functional-testing-framework": "^5.0",
         "pdepend/pdepend": "3.x-dev",
