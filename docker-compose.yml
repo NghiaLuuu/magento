@@ -1,0 +1,101 @@
+services:
+  # PHP-FPM Container - Main Magento
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile-php
+      args:
+        - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-2G}
+    container_name: ${CONTAINER_PHP:-magento_php}
+    volumes:
+      - ./magento:/var/www/html/magento
+    networks:
+      - magento
+
+  # PHP-FPM Container - Sample Data (có thể xóa nếu không cần)
+  php_sampledata:
+    build:
+      context: .
+      dockerfile: Dockerfile-php
+      args:
+        - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-2G}
+    container_name: ${PROJECT_NAME:-magento}_php_sampledata
+    volumes:
+      - ./magento_sampledata:/var/www/html/magento
+    networks:
+      - magento
+
+  # Nginx Web Server - Main Magento
+  nginx:
+    image: nginx:stable-alpine
+    container_name: ${CONTAINER_NGINX:-magento_nginx}
+    ports:
+      - "${PORT_WEB:-80}:80"  # Thay đổi PORT_WEB trong .env nếu conflict
+    volumes:
+      - ./magento:/var/www/html/magento:cached
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    networks:
+      - magento
+
+  # Nginx Web Server - Sample Data (thay đổi port để chạy song song)
+  nginx_sampledata:
+    image: nginx:stable-alpine
+    container_name: ${PROJECT_NAME:-magento}_nginx_sampledata
+    ports:
+      - "8080:80"  # Port riêng cho sample data site
+    volumes:
+      - ./magento_sampledata:/var/www/html/magento:cached
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php_sampledata
+    networks:
+      - magento
+
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: ${CONTAINER_MYSQL:-magento_mysql}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-magento}
+      MYSQL_USER: ${MYSQL_USER:-magento}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-magento123}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "${PORT_MYSQL:-3307}:3306"  # Thay đổi nếu port 3306 bị dùng
+    networks:
+      - magento
+    command: --default-authentication-plugin=mysql_native_password --log_bin_trust_function_creators=1
+
+  # Elasticsearch Search Engine
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.0
+    container_name: ${CONTAINER_ELASTICSEARCH:-magento_elasticsearch}
+    hostname: elasticsearch
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms${ES_MEMORY:-512m} -Xmx${ES_MEMORY:-512m}"
+      cluster.name: ${CLUSTER_NAME:-magento-cluster}
+      node.name: ${NODE_NAME:-magento-node}
+      network.host: "0.0.0.0"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    ports:
+      - "${PORT_ELASTICSEARCH:-9201}:9200"  # Thay đổi nếu port 9200 bị dùng
+    networks:
+      - magento
+
+volumes:
+  db_data:
+
+networks:
+  magento:
+    driver: bridge
+
