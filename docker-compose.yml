@@ -1,5 +1,5 @@
 services:
-  # PHP-FPM Container - Main Magento
+  # PHP-FPM Container - Magento 2
   php:
     build:
       context: .
@@ -9,23 +9,13 @@ services:
     container_name: ${CONTAINER_PHP:-magento_php}
     volumes:
       - ./magento:/var/www/html/magento
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
       - magento
 
-  # PHP-FPM Container - Sample Data (có thể xóa nếu không cần)
-  php_sampledata:
-    build:
-      context: .
-      dockerfile: Dockerfile-php
-      args:
-        - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-2G}
-    container_name: ${PROJECT_NAME:-magento}_php_sampledata
-    volumes:
-      - ./magento_sampledata:/var/www/html/magento
-    networks:
-      - magento
-
-  # Nginx Web Server - Main Magento
+  # Nginx Web Server - Magento 2
   nginx:
     image: nginx:stable-alpine
     container_name: ${CONTAINER_NGINX:-magento_nginx}
@@ -36,20 +26,6 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - php
-    networks:
-      - magento
-
-  # Nginx Web Server - Sample Data (thay đổi port để chạy song song)
-  nginx_sampledata:
-    image: nginx:stable-alpine
-    container_name: ${PROJECT_NAME:-magento}_nginx_sampledata
-    ports:
-      - "8080:80"  # Port riêng cho sample data site
-    volumes:
-      - ./magento_sampledata:/var/www/html/magento:cached
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - php_sampledata
     networks:
       - magento
 
