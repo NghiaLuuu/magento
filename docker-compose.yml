@@ -8,7 +8,7 @@ services:
         - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-2G}
     container_name: ${CONTAINER_PHP:-magento_php}
     volumes:
-      - ./magento:/var/www/html/magento
+      - ./${PROJECT_NAME:-magento}:/var/www/html/${PROJECT_NAME:-magento}
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -22,8 +22,11 @@ services:
     ports:
       - "${PORT_WEB:-80}:80"  # Thay đổi PORT_WEB trong .env nếu conflict
     volumes:
-      - ./magento:/var/www/html/magento:cached
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./${PROJECT_NAME:-magento}:/var/www/html/${PROJECT_NAME:-magento}:cached
+      - ./nginx/default.conf:/etc/nginx/templates/default.conf.template:ro
+    environment:
+      - PROJECT_NAME=${PROJECT_NAME:-magento}
+      - NGINX_ENVSUBST_OUTPUT_DIR=/etc/nginx/conf.d
     depends_on:
       - php
     networks:
