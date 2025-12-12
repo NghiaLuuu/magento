@@ -1,0 +1,1 @@
+docker exec magento_mysql mysqldump -uroot -proot123 magento > /home/nghialuu/magento-docker/magento_sample_data.sql
