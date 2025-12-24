@@ -1,0 +1,16 @@
+{
+    "smilecare_demo_subscription": {
+        "column": {
+            "subscription_id": true,
+            "firstname": true,
+            "lastname": true,
+            "email": true,
+            "message": true,
+            "status": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

@@ -1,0 +1,4 @@
+cat <<EOF > magento/app/code/SmileCare/Demo/i18n/en_US.csv
+"Hello! This is SmileCare Dental System","XIN CHÀO! Đây là hệ thống Nha khoa SmileCare"
+"Congratulations on your first Block!","Chúc mừng bạn đã hiển thị được Block đầu tiên!"
+EOF

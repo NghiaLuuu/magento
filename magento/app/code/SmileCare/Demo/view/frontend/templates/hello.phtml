@@ -1,4 +1,19 @@
-<div class="smilecare-welcome">
-    <h1>Xin chào! Đây là hệ thống SmileCare Dental</h1>
-    <p>Module đầu tiên đã chạy thành công.</p>
+<div class="smilecare-welcome" style="border: 2px solid blue; padding: 20px; margin: 20px;">
+    <h2 style="color: green;"><?= $this->getWelcomeMessage() ?></h2>
+
+    <h3>Danh sách sản phẩm tìm thấy:</h3>
+    <ul>
+        <?php $collection = $this->getProductCollection(); ?>
+
+        <?php if ($collection && $collection->count() > 0): ?>
+            <?php foreach ($collection as $product): ?>
+                <li>
+                    <strong><?= $product->getName() ?></strong>
+                    - Giá: <?= $product->getPrice() ?>
+                </li>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p style="color: red;">Không tìm thấy sản phẩm nào (Database trống)123!</p>
+        <?php endif; ?>
+    </ul>
 </div>

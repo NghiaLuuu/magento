@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="smilecare_demo_subscription" resource="default" engine="innodb" comment="SmileCare Subscription Table">
+
+        <column xsi:type="int" name="subscription_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+
+        <column xsi:type="varchar" name="firstname" nullable="true" length="255" comment="First Name"/>
+        <column xsi:type="varchar" name="lastname" nullable="true" length="255" comment="Last Name"/>
+        <column xsi:type="varchar" name="email" nullable="false" length="255" comment="Email address"/>
+        <column xsi:type="text" name="message" nullable="true" comment="Message"/>
+
+        <column xsi:type="varchar" name="status" nullable="false" length="255" default="pending" comment="Status"/>
+
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="subscription_id"/>
+        </constraint>
+    </table>
+</schema>

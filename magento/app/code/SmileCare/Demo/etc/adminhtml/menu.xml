@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="SmileCare_Demo::root"
+             title="SmileCare"
+             module="SmileCare_Demo"
+             sortOrder="50"
+             resource="SmileCare_Demo::root"/>
+
+        <add id="SmileCare_Demo::index"
+             title="Quản lý Demo"
+             module="SmileCare_Demo"
+             sortOrder="10"
+             parent="SmileCare_Demo::root"
+             action="smilecare/index/index"
+             resource="SmileCare_Demo::index"/>
+    </menu>
+</config>
